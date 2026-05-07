@@ -1,0 +1,221 @@
+date,description,amount,type
+2024-01-01 14:00:00,Airtel Recharge,896.78,debit
+2024-01-03 22:00:00,PhonePe,3136.37,debit
+2024-01-07 21:00:00,Jio Recharge,396.59,debit
+2024-01-08 06:00:00,Amazon,5325.9,debit
+2024-01-08 11:00:00,MakeMyTrip,23245.4,debit
+2024-01-09 14:00:00,Uber,731.6,debit
+2024-01-10 12:00:00,PhonePe,7903.76,debit
+2024-01-13 14:00:00,Paytm,1063.94,debit
+2024-01-14 18:00:00,Flipkart,3501.27,debit
+2024-01-15 08:00:00,BookMyShow,337.6,debit
+2024-01-15 11:00:00,Apollo Pharmacy,2042.89,debit
+2024-01-15 21:00:00,Amazon,299.86,debit
+2024-01-18 05:00:00,IRCTC,1489.85,debit
+2024-01-19 17:00:00,Spotify,135.64,debit
+2024-01-20 00:00:00,Home Loan EMI,34644.29,debit
+2024-01-22 17:00:00,Flipkart,1564.68,debit
+2024-01-22 21:00:00,Uber,551.02,debit
+2024-01-24 07:00:00,Flipkart,6103.67,debit
+2024-01-25 18:00:00,LazyPay,1494.73,debit
+2024-01-26 21:00:00,Airtel Recharge,624.3,debit
+2024-01-27 08:00:00,Mutual Fund SIP,1595.25,debit
+2024-01-27 11:00:00,Airtel Recharge,657.9,debit
+2024-01-28 10:00:00,LazyPay,2210.7,debit
+2024-01-29 07:00:00,Swiggy,490.19,debit
+2024-01-29 10:00:00,Amazon,6463.31,debit
+2024-01-30 22:00:00,Zomato,1205.71,debit
+2024-01-31 15:00:00,MedPlus,1257.42,debit
+2024-02-01 03:00:00,PhonePe,3915.58,debit
+2024-02-01 23:00:00,Netflix,618.65,debit
+2024-02-02 05:00:00,Jio Recharge,710.86,debit
+2024-02-02 11:00:00,Swiggy,874.63,debit
+2024-02-02 20:00:00,Google Pay,4081.78,debit
+2024-02-05 07:00:00,Apollo Pharmacy,2141.25,debit
+2024-02-06 20:00:00,Airtel Recharge,241.18,debit
+2024-02-08 07:00:00,Jio Recharge,560.33,debit
+2024-02-08 23:00:00,Electricity Board,1458.93,debit
+2024-02-09 08:00:00,Mutual Fund SIP,1745.2,debit
+2024-02-09 08:00:00,Spotify,171.69,debit
+2024-02-10 06:00:00,Flipkart,2555.84,debit
+2024-02-11 23:00:00,BookMyShow,432.72,debit
+2024-02-12 10:00:00,Google Pay,9104.15,debit
+2024-02-13 00:00:00,Mutual Fund SIP,781.34,debit
+2024-02-14 03:00:00,Zomato,1088.63,debit
+2024-02-14 10:00:00,Flipkart,4826.05,debit
+2024-02-15 06:00:00,MakeMyTrip,11177.92,debit
+2024-02-15 10:00:00,LazyPay,2020.68,debit
+2024-02-16 16:00:00,BookMyShow,1963.63,debit
+2024-02-18 01:00:00,Google Pay,3744.27,debit
+2024-02-18 09:00:00,Mutual Fund SIP,1137.75,debit
+2024-02-19 10:00:00,Spotify,110.69,debit
+2024-02-20 07:00:00,IRCTC,2870.34,debit
+2024-02-24 14:00:00,Salary Credit,74103.28,credit
+2024-02-25 12:00:00,Apollo Pharmacy,348.43,debit
+2024-02-26 16:00:00,Jio Recharge,974.47,debit
+2024-02-27 02:00:00,Apollo Pharmacy,466.59,debit
+2024-02-28 06:00:00,Spotify,130.5,debit
+2024-02-29 16:00:00,Car Loan EMI,24900.49,debit
+2024-03-02 08:00:00,PhonePe,7894.18,debit
+2024-03-03 15:00:00,Google Pay,2126.98,debit
+2024-03-05 18:00:00,PhonePe,3375.33,debit
+2024-03-06 15:00:00,Home Loan EMI,18340.25,debit
+2024-03-08 00:00:00,Amazon,3273.4,debit
+2024-03-08 00:00:00,Amazon,6645.14,debit
+2024-03-08 18:00:00,BookMyShow,544.39,debit
+2024-03-09 15:00:00,Electricity Board,2232.06,debit
+2024-03-09 20:00:00,BookMyShow,2170.06,debit
+2024-03-11 17:00:00,Salary Credit,89886.51,credit
+2024-03-12 16:00:00,Apollo Pharmacy,1654.28,debit
+2024-03-14 00:00:00,Zomato,1426.7,debit
+2024-03-14 09:00:00,Jio Recharge,300.27,debit
+2024-03-16 13:00:00,Salary Credit,83093.1,credit
+2024-03-18 07:00:00,Jio Recharge,443.62,debit
+2024-03-19 14:00:00,Netflix,244.84,debit
+2024-03-19 20:00:00,MedPlus,897.9,debit
+2024-03-20 12:00:00,LazyPay,1035.15,debit
+2024-03-20 22:00:00,Airtel Recharge,717.83,debit
+2024-03-21 07:00:00,Salary Credit,94710.22,credit
+2024-03-22 03:00:00,Salary Credit,41136.9,credit
+2024-03-22 08:00:00,Paytm,2922.18,debit
+2024-03-22 12:00:00,MedPlus,426.9,debit
+2024-03-22 13:00:00,MakeMyTrip,10950.39,debit
+2024-03-23 02:00:00,Paytm,2618.45,debit
+2024-03-23 11:00:00,IRCTC,623.08,debit
+2024-03-23 19:00:00,Apollo Pharmacy,276.81,debit
+2024-03-23 20:00:00,Jio Recharge,226.66,debit
+2024-03-24 05:00:00,Home Loan EMI,44326.78,debit
+2024-03-25 13:00:00,Airtel Recharge,925.03,debit
+2024-03-26 02:00:00,Uber,201.01,debit
+2024-03-26 15:00:00,Home Loan EMI,25437.13,debit
+2024-03-28 05:00:00,Apollo Pharmacy,1133.9,debit
+2024-03-29 14:00:00,Apollo Pharmacy,741.29,debit
+2024-03-30 08:00:00,MedPlus,1603.58,debit
+2024-03-30 17:00:00,Mutual Fund SIP,4135.83,debit
+2024-03-30 19:00:00,Zomato,1210.71,debit
+2024-03-30 20:00:00,Apollo Pharmacy,611.73,debit
+2024-03-31 08:00:00,Ola,296.93,debit
+2024-04-01 11:00:00,MedPlus,1794.21,debit
+2024-04-01 19:00:00,Ola,475.11,debit
+2024-04-03 07:00:00,Jio Recharge,256.4,debit
+2024-04-03 18:00:00,Swiggy,587.31,debit
+2024-04-04 09:00:00,Jio Recharge,339.95,debit
+2024-04-05 02:00:00,Netflix,510.99,debit
+2024-04-05 07:00:00,Airtel Recharge,488.8,debit
+2024-04-06 01:00:00,Spotify,138.88,debit
+2024-04-06 08:00:00,Swiggy,1199.02,debit
+2024-04-07 02:00:00,Google Pay,8846.29,debit
+2024-04-07 16:00:00,PhonePe,1468.2,debit
+2024-04-08 16:00:00,Paytm,1562.88,debit
+2024-04-08 16:00:00,MedPlus,1658.52,debit
+2024-04-10 06:00:00,Zomato,580.15,debit
+2024-04-11 06:00:00,Mutual Fund SIP,1897.65,debit
+2024-04-11 22:00:00,PhonePe,1158.24,debit
+2024-04-14 07:00:00,LazyPay,2413.36,debit
+2024-04-15 11:00:00,Netflix,270.01,debit
+2024-04-15 14:00:00,Netflix,585.44,debit
+2024-04-17 18:00:00,Car Loan EMI,23667.94,debit
+2024-04-18 22:00:00,Flipkart,7207.88,debit
+2024-04-19 05:00:00,Car Loan EMI,15521.36,debit
+2024-04-20 09:00:00,Spotify,153.62,debit
+2024-04-20 14:00:00,Google Pay,5333.39,debit
+2024-04-21 05:00:00,MedPlus,355.91,debit
+2024-04-22 04:00:00,Jio Recharge,243.62,debit
+2024-04-22 17:00:00,LazyPay,1642.56,debit
+2024-04-22 17:00:00,Simpl,2161.4,debit
+2024-04-24 10:00:00,Amazon,2691.64,debit
+2024-04-26 00:00:00,Spotify,148.23,debit
+2024-04-26 06:00:00,MedPlus,775.51,debit
+2024-04-26 23:00:00,Uber,776.29,debit
+2024-04-29 00:00:00,PhonePe,246.3,debit
+2024-04-29 00:00:00,LazyPay,565.47,debit
+2024-04-29 16:00:00,Amazon,4554.57,debit
+2024-04-30 05:00:00,Swiggy,661.93,debit
+2024-05-01 10:00:00,Electricity Board,2793.08,debit
+2024-05-02 12:00:00,Google Pay,5435.78,debit
+2024-05-02 18:00:00,IRCTC,3688.82,debit
+2024-05-03 10:00:00,Netflix,315.01,debit
+2024-05-05 15:00:00,Uber,797.39,debit
+2024-05-05 21:00:00,Simpl,976.29,debit
+2024-05-06 11:00:00,Jio Recharge,583.47,debit
+2024-05-07 14:00:00,Mutual Fund SIP,3795.45,debit
+2024-05-08 12:00:00,BookMyShow,1883.9,debit
+2024-05-09 13:00:00,PhonePe,3545.39,debit
+2024-05-09 14:00:00,MakeMyTrip,21229.79,debit
+2024-05-09 21:00:00,Paytm,3482.32,debit
+2024-05-11 19:00:00,Electricity Board,1664.99,debit
+2024-05-12 02:00:00,Amazon,4642.27,debit
+2024-05-12 07:00:00,Electricity Board,4365.71,debit
+2024-05-12 11:00:00,BookMyShow,987.52,debit
+2024-05-12 14:00:00,Mutual Fund SIP,1792.53,debit
+2024-05-13 08:00:00,Amazon,3946.58,debit
+2024-05-14 07:00:00,Flipkart,2416.96,debit
+2024-05-14 10:00:00,Simpl,701.35,debit
+2024-05-14 16:00:00,Airtel Recharge,945.83,debit
+2024-05-15 20:00:00,Netflix,562.78,debit
+2024-05-16 22:00:00,Swiggy,631.38,debit
+2024-05-17 08:00:00,PhonePe,4721.23,debit
+2024-05-17 09:00:00,Jio Recharge,802.19,debit
+2024-05-18 21:00:00,MedPlus,1306.61,debit
+2024-05-19 07:00:00,Salary Credit,53663.07,credit
+2024-05-20 20:00:00,PhonePe,7255.64,debit
+2024-05-20 21:00:00,IRCTC,2537.65,debit
+2024-05-21 02:00:00,Paytm,1348.06,debit
+2024-05-21 20:00:00,LazyPay,979.07,debit
+2024-05-23 01:00:00,Google Pay,671.55,debit
+2024-05-25 03:00:00,Apollo Pharmacy,1373.82,debit
+2024-05-25 21:00:00,Paytm,2497.15,debit
+2024-05-25 23:00:00,Electricity Board,947.28,debit
+2024-05-26 11:00:00,Simpl,268.11,debit
+2024-05-26 13:00:00,Spotify,165.62,debit
+2024-05-26 23:00:00,IRCTC,658.43,debit
+2024-05-27 12:00:00,Electricity Board,2279.87,debit
+2024-05-29 21:00:00,Swiggy,887.07,debit
+2024-05-31 19:00:00,Mutual Fund SIP,4887.15,debit
+2024-06-01 19:00:00,Car Loan EMI,15893.17,debit
+2024-06-02 02:00:00,Flipkart,1393.55,debit
+2024-06-02 10:00:00,Jio Recharge,380.19,debit
+2024-06-03 02:00:00,Amazon,5787.79,debit
+2024-06-03 03:00:00,Airtel Recharge,277.77,debit
+2024-06-05 18:00:00,Spotify,151.01,debit
+2024-06-05 19:00:00,Amazon,699.04,debit
+2024-06-05 23:00:00,LazyPay,760.91,debit
+2024-06-06 05:00:00,Home Loan EMI,31958.53,debit
+2024-06-06 20:00:00,Spotify,159.58,debit
+2024-06-06 21:00:00,Spotify,120.66,debit
+2024-06-07 15:00:00,Zomato,651.22,debit
+2024-06-07 21:00:00,PhonePe,2618.4,debit
+2024-06-08 00:00:00,Amazon,2639.41,debit
+2024-06-08 05:00:00,Simpl,1271.79,debit
+2024-06-08 09:00:00,Spotify,178.49,debit
+2024-06-09 04:00:00,Home Loan EMI,24925.87,debit
+2024-06-09 09:00:00,Apollo Pharmacy,1751.33,debit
+2024-06-10 00:00:00,Airtel Recharge,416.32,debit
+2024-06-11 00:00:00,Home Loan EMI,42645.89,debit
+2024-06-11 16:00:00,Flipkart,6358.1,debit
+2024-06-12 23:00:00,Amazon,6573.9,debit
+2024-06-13 07:00:00,MakeMyTrip,21219.41,debit
+2024-06-14 08:00:00,MedPlus,1612.38,debit
+2024-06-14 10:00:00,Jio Recharge,392.55,debit
+2024-06-14 12:00:00,Salary Credit,76231.41,credit
+2024-06-15 20:00:00,Uber,390.85,debit
+2024-06-16 15:00:00,MakeMyTrip,19679.11,debit
+2024-06-17 15:00:00,Uber,613.75,debit
+2024-06-18 02:00:00,Spotify,189.94,debit
+2024-06-18 03:00:00,Uber,696.08,debit
+2024-06-19 03:00:00,Netflix,529.62,debit
+2024-06-19 18:00:00,PhonePe,1459.22,debit
+2024-06-21 08:00:00,PhonePe,3262.51,debit
+2024-06-22 05:00:00,Netflix,617.41,debit
+2024-06-23 07:00:00,Uber,345.37,debit
+2024-06-23 17:00:00,MedPlus,1624.29,debit
+2024-06-24 19:00:00,BookMyShow,2085.79,debit
+2024-06-25 15:00:00,IRCTC,4973.92,debit
+2024-06-25 18:00:00,Google Pay,1596.51,debit
+2024-06-25 22:00:00,Google Pay,3161.28,debit
+2024-06-25 23:00:00,Jio Recharge,867.33,debit
+2024-06-27 03:00:00,Airtel Recharge,796.13,debit
+2024-06-27 05:00:00,MedPlus,144.94,debit
+2024-06-29 03:00:00,Ola,789.66,debit
+2024-06-29 13:00:00,Swiggy,1062.46,debit
+2024-06-29 16:00:00,Mutual Fund SIP,555.95,debit
