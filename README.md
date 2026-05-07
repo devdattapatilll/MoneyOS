@@ -2,105 +2,101 @@
 
 **UPI Spend Analyzer & Personal Financial Health Mapper**
 
-A Next.js-based financial assistant with Supabase backend. Upload your UPI transaction statement (CSV or PDF) and instantly unlock spending insights, leak detection, a financial wellness score, and personalized recommendations — all in a polished dark-mode dashboard.
+## Problem Statement
 
----
+Millions of users in India transact via UPI daily, but most have no visibility into their spending patterns. Bank statements are static PDFs or CSV dumps that offer no insights. Users cannot easily identify:
+- Where their money is going (spending breakdown)
+- Recurring subscriptions draining their account
+- Overuse of BNPL (Buy Now Pay Later) services
+- Food delivery expenses piling up
+- Weekend vs weekday spending patterns
+- Financial wellness score
 
-## Features
+## What This Project Solves
 
-- **File Upload**: Supports CSV and PDF bank/UPI statements.
-- **Auto-Extraction**: Extracts transactions using papaparse (CSV) and pdf-parse (PDF).
-- **Smart Categorization**: Automatically tags 14 categories using keyword + fuzzy matching (fuse.js).
-- **Financial Analytics**: Spending breakdown, monthly trends, top merchants, weekday analysis.
-- **Leak Detection**: Finds subscriptions, BNPL usage, food delivery overuse, shopping spikes, and recurring payments.
-- **Wellness Score**: A 0–100 score with grade (Excellent / Good / Moderate / Risky).
-- **AI-Style Recommendations**: Data-driven actionable tips with estimated monthly savings.
-- **Anomaly Alerts**: Flags unusually large transactions per category.
-- **Interactive Dashboard**: Built with Recharts, glassmorphism cards, and a dark fintech theme.
-- **Supabase Integration**: Save transactions to Supabase backend.
-- **Sample Data**: 100+ realistic Indian UPI transactions for instant demo.
-
----
+Money OS transforms raw UPI/bank statements into actionable financial intelligence. It provides:
+- **Automatic categorization** of transactions into 14 categories
+- **Financial leak detection** (subscriptions, BNPL, food delivery)
+- **Wellness scoring** to gauge financial health
+- **Personalized recommendations** with estimated savings
+- **Visual analytics** with interactive charts
+- **Anomaly detection** for unusual spending
 
 ## Architecture
 
 ```
 money_os/
-├── app/                      # Next.js App Router
-│   ├── actions.ts           # Server actions for parsing & Supabase
-│   ├── globals.css          # Global styles
-│   ├── layout.tsx           # Root layout
-│   └── page.tsx             # Main dashboard
-│
-├── components/              # React components
-│   ├── AnomalyAlerts.tsx
-│   ├── Charts.tsx
-│   ├── KpiCards.tsx
-│   ├── LeakDetection.tsx
+├── app/                    # Next.js App Router
+│   ├── page.tsx           # Two-view UI (Landing + Dashboard)
+│   ├── layout.tsx         # Root layout
+│   ├── globals.css        # Global styles
+│   └── actions.ts        # Server actions for parsing
+├── components/            # React components
+│   ├── Charts.tsx        # Recharts visualizations
+│   ├── KpiCards.tsx      # Financial KPIs
+│   ├── LeakDetection.tsx # Leak cards
 │   ├── Recommendations.tsx
-│   ├── TransactionTable.tsx
-│   ├── UploadSection.tsx
 │   └── WellnessGauge.tsx
-│
-├── lib/                     # Utilities & logic
-│   ├── analytics/           # Insights, scoring, leak detection
-│   ├── categorizer/         # Category rules & engine
-│   ├── parsers/             # CSV & PDF parsers
-│   ├── cleaner.ts           # Data cleaning
-│   ├── helpers.ts           # Date/amount utilities
-│   └── supabaseClient.ts    # Supabase client
-│
-├── data/                    # Sample data
-│   └── sample_transactions.csv
-│
-├── package.json             # Dependencies
-├── next.config.mjs          # Next.js config
-├── tailwind.config.ts       # Tailwind config
-├── tsconfig.json            # TypeScript config
-└── README.md                # This file
+├── lib/                  # Core logic
+│   ├── parsers/         # CSV/PDF parsing
+│   ├── categorizer/     # Transaction categorization
+│   ├── analytics/       # Insights, scoring, leak detection
+│   └── helpers.ts       # Utility functions
+└── data/                # Sample transaction data
 ```
-
----
-
-## Setup
-
-1. **Clone or download** this repository.
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Set up Supabase**:
-   - Create a Supabase project
-   - Create a `transactions` table with columns: `date`, `description`, `merchant_clean`, `amount`, `type`, `category`, `month`, `day_of_week`, `hour`, `is_weekend`, `is_night`
-   - Update `lib/supabaseClient.ts` with your project URL and anon key
-4. **Run the dev server**:
-   ```bash
-   npm run dev
-   ```
-5. Open http://localhost:3000
-
----
-
-## Deployment (Vercel)
-
-1. Push code to GitHub
-2. Import project in Vercel
-3. Add environment variables for Supabase if needed
-4. Deploy
-
----
 
 ## Tech Stack
 
-- **Framework**: Next.js 14.2 + React 18 + TypeScript
-- **Styling**: Tailwind CSS + glassmorphism
+- **Framework**: Next.js 14 + React + TypeScript
+- **Styling**: Tailwind CSS + Glassmorphism
 - **Charts**: Recharts
-- **Backend**: Supabase
-- **Parsing**: papaparse, pdf-parse, fuse.js
-- **Icons**: lucide-react
+- **Parsing**: PapaParse (CSV), pdf-parse (PDF)
+- **Matching**: Fuse.js (fuzzy search)
+- **Icons**: Lucide React
 
----
+## Key Features
+
+### 1. Smart Categorization
+Automatically tags transactions into 14 categories using keyword matching and fuzzy search:
+- Food, Shopping, Transport, Bills
+- Healthcare, Entertainment, Travel
+- Subscriptions, BNPL, EMI, Investments
+
+### 2. Financial Leak Detection
+Identifies money drains:
+- **Subscriptions**: Recurring payments to streaming, apps, services
+- **BNPL Usage**: Simpl, Lazypay, Zestmoney transactions
+- **Food Delivery**: Swiggy, Zomato overuse detection
+
+### 3. Wellness Score (0-100)
+Calculates financial health based on:
+- Savings ratio (income vs expenses)
+- Non-essential spending percentage
+- Consistency of monthly balances
+- Negative month frequency
+
+### 4. Visual Analytics
+- Spend breakdown by category (pie chart)
+- Monthly income vs expenses (line chart)
+- Top spending categories (bar chart)
+- Weekday spending patterns
+
+## How It Works
+
+1. **Upload**: User uploads CSV or PDF bank statement
+2. **Parse**: System extracts transactions with date, description, amount
+3. **Clean**: Merchant names normalized, amounts parsed
+4. **Categorize**: Each transaction tagged by category
+5. **Analyze**: Insights computed (totals, trends, anomalies)
+6. **Detect**: Leaks identified (subscriptions, BNPL, food)
+7. **Score**: Financial wellness calculated
+8. **Recommend**: Personalized tips generated with savings estimates
+9. **Display**: Dashboard shows all insights
+
+## Sample Data
+
+Includes 100+ realistic Indian UPI transactions for testing without uploading personal data.
 
 ## License
 
-MIT — built for hackathons and personal finance experiments.
+MIT — Built for financial awareness and literacy.
