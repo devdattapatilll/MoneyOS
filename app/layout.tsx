@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Money OS — UPI Spend Analyzer",
-  description: "AI-powered personal financial health mapper",
+  description: "AI-powered personal financial health mapper for Indian UPI transactions",
 };
 
 export default function RootLayout({
