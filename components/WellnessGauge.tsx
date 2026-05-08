@@ -1,4 +1,5 @@
 "use client";
+// Wellness gauge component for score visualization
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
