@@ -1,4 +1,5 @@
 "use client";
+// KPI Cards component for financial metrics display
 
 import { ArrowDown, ArrowUp, PiggyBank, Activity } from "lucide-react";
 
