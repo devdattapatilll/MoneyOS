@@ -1,4 +1,5 @@
 "use client";
+// Leak detection component for financial insights
 
 import { CreditCard, ShoppingBag, Utensils, Zap } from "lucide-react";
 
