@@ -1,135 +1,65 @@
-# Money OS 💰
+# MoneyOS
 
-**UPI Spend Analyzer & Personal Financial Health Mapper**
+UPI Spend Analyzer and Personal Financial Health Mapper
 
-## Problem Statement
+## Problem
 
-Millions of users in India transact via UPI daily, but most have no visibility into their spending patterns. Bank statements are static PDFs or CSV dumps that offer no insights. Users cannot easily identify:
-- Where their money is going (spending breakdown)
-- Recurring subscriptions draining their account
-- Overuse of BNPL (Buy Now Pay Later) services
-- Food delivery expenses piling up
-- Weekend vs weekday spending patterns
-- Financial wellness score
+Millions of users in India transact via UPI daily, but most have no visibility into their spending patterns. Bank statements are static PDFs or CSV dumps that offer no insights. Users struggle to identify where their money is going, recurring subscriptions draining their accounts, overuse of BNPL services, food delivery expenses, and overall financial wellness.
 
-## What This Project Solves
+## Solution
 
-Money OS transforms raw UPI/bank statements into actionable financial intelligence. It provides:
-- **Automatic categorization** of transactions into 14 categories
-- **Financial leak detection** (subscriptions, BNPL, food delivery)
-- **Wellness scoring** to gauge financial health
-- **Personalized recommendations** with estimated savings
-- **Visual analytics** with interactive charts
-- **Anomaly detection** for unusual spending
+MoneyOS transforms raw UPI and bank statements into actionable financial intelligence without requiring AI or OCR. It provides automatic transaction categorization into 14 categories, financial leak detection for subscriptions and BNPL usage, a wellness score from 0-100, personalized recommendations with estimated savings, and visual analytics with interactive charts.
 
 ## Architecture
 
 ```
-money_os/
+MoneyOS/
 ├── app/                    # Next.js App Router
-│   ├── page.tsx           # Two-view UI (Landing + Dashboard)
+│   ├── page.tsx           # Dashboard UI
 │   ├── layout.tsx         # Root layout
 │   ├── globals.css        # Global styles
-│   └── actions.ts        # Server actions for parsing
+│   └── actions.ts         # Server actions for file processing
 ├── components/            # React components
-│   ├── Charts.tsx        # Recharts visualizations
-│   ├── KpiCards.tsx      # Financial KPIs
-│   ├── LeakDetection.tsx # Leak cards
-│   ├── Recommendations.tsx
-│   └── WellnessGauge.tsx
-├── lib/                  # Core logic
-│   ├── parsers/         # CSV/PDF parsing
-│   ├── categorizer/     # Transaction categorization
-│   ├── analytics/       # Insights, scoring, leak detection
-│   └── helpers.ts       # Utility functions
-└── data/                # Sample transaction data
+│   ├── Charts.tsx         # Data visualizations
+│   ├── KpiCards.tsx       # Financial KPIs
+│   ├── LeakDetection.tsx  # Leak detection cards
+│   ├── Recommendations.tsx # Savings recommendations
+│   ├── WellnessGauge.tsx  # Financial health gauge
+│   └── DownloadReportButton.tsx # PDF report export
+├── lib/                   # Core logic
+│   ├── parsers/           # CSV and PDF parsing
+│   ├── categorizer/       # Transaction categorization engine
+│   ├── analytics/         # Insights, scoring, leak detection
+│   └── helpers.ts         # Utility functions
+├── types/                 # TypeScript definitions
+└── data/                  # Sample data for testing
 ```
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 + React + TypeScript
-- **Styling**: Tailwind CSS + Glassmorphism
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
 - **Charts**: Recharts
-- **Parsing**: PapaParse (CSV), pdf-parse (PDF)
-- **Matching**: Fuse.js (fuzzy search)
+- **CSV Parsing**: PapaParse
+- **PDF Parsing**: pdf-parse
+- **Fuzzy Matching**: Fuse.js
+- **PDF Export**: html2canvas, jspdf
 - **Icons**: Lucide React
+- **Backend**: Supabase (optional)
 
-## Key Features
+## Future Scope
 
-### 1. Smart Categorization
-Automatically tags transactions into 14 categories using keyword matching and fuzzy search:
-- Food, Shopping, Transport, Bills
-- Healthcare, Entertainment, Travel
-- Subscriptions, BNPL, EMI, Investments
+- Multi-currency support for international transactions
+- Investment portfolio tracking and analysis
+- Budget setting with alerts and notifications
+- Historical trend comparison across months
+- Export to accounting software formats
+- Mobile application for on-the-go access
+- Bank API integration for automatic syncing
 
-### 2. Financial Leak Detection
-Identifies money drains:
-- **Subscriptions**: Recurring payments to streaming, apps, services
-- **BNPL Usage**: Simpl, Lazypay, Zestmoney transactions
-- **Food Delivery**: Swiggy, Zomato overuse detection
+## Owner
 
-### 3. Wellness Score (0-100)
-Calculates financial health based on:
-- Savings ratio (income vs expenses)
-- Non-essential spending percentage
-- Consistency of monthly balances
-- Negative month frequency
+Built by Devdatta Patil
 
-### 4. Visual Analytics
-- Spend breakdown by category (pie chart)
-- Monthly income vs expenses (line chart)
-- Top spending categories (bar chart)
-- Weekday spending patterns
-
-## How It Works
-
-1. **Upload**: User uploads CSV or PDF bank statement
-2. **Parse**: System extracts transactions with date, description, amount
-3. **Clean**: Merchant names normalized, amounts parsed
-4. **Categorize**: Each transaction tagged by category
-5. **Analyze**: Insights computed (totals, trends, anomalies)
-6. **Detect**: Leaks identified (subscriptions, BNPL, food)
-7. **Score**: Financial wellness calculated
-8. **Recommend**: Personalized tips generated with savings estimates
-9. **Display**: Dashboard shows all insights
-
-## Sample Data
-
-Includes 100+ realistic Indian UPI transactions for testing without uploading personal data.
-
-## Supabase Setup
-
-1. Create a Supabase project at https://supabase.com
-2. Copy your project URL and anon key
-3. Create a `.env.local` file (see `.env.local.example`)
-4. Run the SQL schema from `supabase/schema.sql` in the SQL Editor
-5. Create a storage bucket named "statements" (optional for file storage)
-
-## Environment Variables
-
-Create a `.env.local` file:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-```
-
-## Running Locally
-
-```bash
-npm install
-npm run dev
-```
-
-Open http://localhost:3000
-
-## Building for Production
-
-```bash
-npm run build
-npm start
-```
-
-## License
-
-MIT — Built for financial awareness and literacy.
+MIT License — Built for financial awareness and literacy.
