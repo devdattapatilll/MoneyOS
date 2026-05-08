@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import { normalizeDate, parseAmount, sanitizeText, inferTransactionType } from "@/lib/helpers";
+import { normalizeDate, parseAmount, sanitizeText } from "@/lib/helpers";
 
 export interface RawTransaction {
   date: string;
@@ -9,251 +9,274 @@ export interface RawTransaction {
   [key: string]: any;
 }
 
-// Flexible column name mappings for various bank formats
-const COLUMN_MAPPINGS = {
-  date: [
-    "date", "txn date", "value date", "transaction date", "posting date",
-    "tran date", "trxn date", "dt", "transaction dt", "value dt",
-    "transaction date/time", "date/time", "time stamp", "timestamp",
-    "initiated date", "completion date", "txn time"
-  ],
-  description: [
-    "description", "narration", "particulars", "details", "remarks",
-    "transaction details", "merchant", "payee", "beneficiary", "name",
-    "transaction description", "desc", "narration details", "transaction particulars",
-    "utr", "transaction id", "ref no", "reference", "ref number", "reference number",
-    "utr no", "utr number", "transaction ref", "note", "transaction note",
-    "to", "from", "sender", "receiver", "account", "account name"
-  ],
-  amount: [
-    "amount", "txn amount", "transaction amount", "debit", "credit",
-    "withdrawal", "deposit", "amt", "trxn amount", "transaction amt",
-    "dr amount", "cr amount", "debit amount", "credit amount",
-    "withdrawal amount", "deposit amount", "transaction value"
-  ],
-  debitAmount: [
-    "debit", "withdrawal", "dr", "debit amount", "dr amount", "outflow",
-    "withdrawal amt", "debited", "money out", "paid", "sent"
-  ],
-  creditAmount: [
-    "credit", "deposit", "cr", "credit amount", "cr amount", "inflow",
-    "deposit amt", "credited", "money in", "received", "got"
-  ],
-  type: [
-    "type", "dr/cr", "debit/credit", "txn type", "transaction type",
-    "nature", "transaction nature", "debit/credit indicator",
-    "transaction status", "status"
-  ]
-};
-
-function findColumn(headers: string[], alternatives: string[]): string | undefined {
-  const normalizedHeaders = headers.map(h => h.toLowerCase().trim().replace(/\s+/g, " "));
-  
-  // First try exact matches
-  for (const alt of alternatives) {
-    const normalizedAlt = alt.toLowerCase().trim();
-    const exactMatch = normalizedHeaders.find(h => h === normalizedAlt);
-    if (exactMatch) return headers[normalizedHeaders.indexOf(exactMatch)];
-  }
-  
-  // Then try partial matches where alternative is contained in header
-  for (const alt of alternatives) {
-    const normalizedAlt = alt.toLowerCase().trim();
-    const partialMatch = normalizedHeaders.find(h => h.includes(normalizedAlt));
-    if (partialMatch) return headers[normalizedHeaders.indexOf(partialMatch)];
-  }
-  
-  // Then try partial matches where header is contained in alternative
-  for (const alt of alternatives) {
-    const normalizedAlt = alt.toLowerCase().trim();
-    const partialMatch = normalizedHeaders.find(h => normalizedAlt.includes(h) && h.length > 2);
-    if (partialMatch) return headers[normalizedHeaders.indexOf(partialMatch)];
-  }
-  
-  return undefined;
+export interface ParseResult {
+  transactions: RawTransaction[];
+  warnings: string[];
+  confidence: number;
+  totalRows: number;
+  skippedRows: number;
+  mappedColumns: {
+    dateCol?: string;
+    descCol?: string;
+    amtCol?: string;
+    debitCol?: string;
+    creditCol?: string;
+    typeCol?: string;
+  };
 }
 
-// Smart column guessing based on content analysis
-function guessColumnsByContent(headers: string[]): { dateCol?: string; descCol?: string; amtCol?: string } {
-  const result: { dateCol?: string; descCol?: string; amtCol?: string } = {};
-  
+const DATE_ALIASES = [
+  "date",
+  "txn date",
+  "value date",
+  "posting date",
+  "transaction date",
+  "dates",
+  "ts",
+  "timestamp",
+  "time stamp",
+  "transaction timestamp",
+  "created at",
+  "transaction time",
+  "dt",
+  "tran date",
+  "booking date",
+];
+const DESC_ALIASES = [
+  "description",
+  "narration",
+  "particulars",
+  "details",
+  "remarks",
+  "merchant",
+  "payee",
+  "payee name",
+  "beneficiary",
+  "beneficiary name",
+  "receiver",
+  "receiver name",
+  "transaction details",
+  "transaction remarks",
+  "narrative",
+  "memo",
+  "reference",
+  "name",
+];
+const AMOUNT_ALIASES = ["amount", "amount inr", "txn amount", "transaction amount", "net amount", "value", "paid amount", "transaction value"];
+const DEBIT_ALIASES = ["debit", "withdrawal", "withdrawn", "debit amount", "dr amount", "withdrawal amt", "debit amt", "money out"];
+const CREDIT_ALIASES = ["credit", "deposit", "deposited", "credit amount", "cr amount", "deposit amt", "credit amt", "money in"];
+const TYPE_ALIASES = ["type", "dr/cr", "debit/credit", "txn type", "transaction type", "cr/dr", "transaction nature", "nature"];
+
+function normalizeHeader(h: string): string {
+  return h
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function findBestColumn(headers: string[], aliases: string[]): string | undefined {
+  const normalizedAliases = aliases.map(normalizeHeader);
+  const compactAliases = normalizedAliases.map((alias) => alias.replace(/\s+/g, ""));
+  return headers.find((header) => {
+    const normalized = normalizeHeader(header);
+    const compact = normalized.replace(/\s+/g, "");
+    return normalizedAliases.some((alias, index) => normalized.includes(alias) || compact.includes(compactAliases[index]));
+  });
+}
+
+function findColumnBySample(
+  rows: Record<string, string>[],
+  headers: string[],
+  predicate: (value: string) => boolean,
+  minMatches = 2
+): string | undefined {
+  let best: { header: string; count: number } | null = null;
   for (const header of headers) {
-    const lower = header.toLowerCase();
-    
-    // Date detection - contains date-like words
-    if (/date|time|dt|day|month|year/.test(lower)) {
-      result.dateCol = header;
+    let count = 0;
+    for (const row of rows.slice(0, 25)) {
+      if (predicate(String(row[header] || "").trim())) count += 1;
     }
-    
-    // Description detection - contains description-like words
-    if (/desc|narr|partic|detail|remark|note|merchant|payee|beneficiary|name|to|from|utr|ref/.test(lower)) {
-      result.descCol = header;
-    }
-    
-    // Amount detection - contains amount-like words (but not 'date')
-    if ((/amount|amt|debit|credit|withdrawal|deposit|dr|cr|money|value|sum/.test(lower)) && !/date/.test(lower)) {
-      result.amtCol = header;
+    if (count >= minMatches && (!best || count > best.count)) {
+      best = { header, count };
     }
   }
-  
-  return result;
+  return best?.header;
 }
 
-function parseAmountFromRow(row: Record<string, string>, amtCol?: string, debitCol?: string, creditCol?: string): { amount: number | null; type: string } {
-  // If we have separate debit/credit columns
-  if (debitCol && creditCol) {
-    const debitVal = row[debitCol]?.trim() || "";
-    const creditVal = row[creditCol]?.trim() || "";
-    
-    if (debitVal && debitVal !== "0" && debitVal !== "") {
-      const amount = parseAmount(debitVal);
-      if (amount !== null) return { amount, type: "debit" };
-    }
-    
-    if (creditVal && creditVal !== "0" && creditVal !== "") {
-      const amount = parseAmount(creditVal);
-      if (amount !== null) return { amount, type: "credit" };
-    }
+function hasUsableContent(row: Record<string, string>): boolean {
+  return Object.values(row).some((value) => String(value || "").trim().length > 0);
+}
+
+function hasValue(value: unknown): boolean {
+  if (value === null || value === undefined) return false;
+  const text = String(value).trim();
+  if (!text) return false;
+  const amount = parseAmount(text);
+  return amount !== null && amount > 0;
+}
+
+function parseSignedAmount(value: unknown): number | null {
+  if (value === null || value === undefined) return null;
+  const text = String(value).trim();
+  if (!text) return null;
+  return parseAmount(text);
+}
+
+function inferFromType(typeValue: string): "credit" | "debit" | null {
+  const text = typeValue.toLowerCase().trim();
+  if (/\b(cr|credit|deposit|deposited|received|receipt|inflow)\b/.test(text)) return "credit";
+  if (/\b(dr|debit|withdrawal|withdrawn|paid|sent|outflow)\b/.test(text)) return "debit";
+  return null;
+}
+
+function inferFromDescription(description: string): "credit" | "debit" {
+  if (/\b(salary|refund|deposit|deposited|cashback|reversal|received|credited)\b/i.test(description)) {
+    return "credit";
   }
-  
-  // If we have a single amount column with type indicator
-  if (amtCol) {
-    const amtVal = row[amtCol]?.trim() || "";
-    const amount = parseAmount(amtVal);
-    
-    if (amount !== null) {
-      // Try to infer type from surrounding columns
-      const type = inferTransactionType(row);
-      return { amount, type };
-    }
+  return "debit";
+}
+
+function extractAmountAndType(
+  row: Record<string, string>,
+  description: string,
+  columns: { amtCol?: string; debitCol?: string; creditCol?: string; typeCol?: string }
+): { amount: number | null; type: "credit" | "debit" } {
+  const explicitType = columns.typeCol ? inferFromType(row[columns.typeCol] || "") : null;
+
+  if (columns.debitCol && hasValue(row[columns.debitCol])) {
+    return { amount: parseSignedAmount(row[columns.debitCol]), type: explicitType || "debit" };
   }
-  
-  // Fallback: scan all columns for amounts
-  for (const [key, val] of Object.entries(row)) {
-    const lowerKey = key.toLowerCase();
-    if (lowerKey.includes("debit") || lowerKey.includes("dr")) {
-      const amount = parseAmount(val);
-      if (amount !== null) return { amount, type: "debit" };
-    }
-    if (lowerKey.includes("credit") || lowerKey.includes("cr")) {
-      const amount = parseAmount(val);
-      if (amount !== null) return { amount, type: "credit" };
-    }
+
+  if (columns.creditCol && hasValue(row[columns.creditCol])) {
+    return { amount: parseSignedAmount(row[columns.creditCol]), type: explicitType || "credit" };
   }
-  
-  return { amount: null, type: "debit" };
+
+  if (!columns.amtCol) {
+    return { amount: null, type: explicitType || inferFromDescription(description) };
+  }
+
+  const rawAmount = row[columns.amtCol];
+  const amount = parseSignedAmount(rawAmount);
+  if (amount === null) {
+    return { amount: null, type: explicitType || inferFromDescription(description) };
+  }
+
+  if (explicitType) return { amount, type: explicitType };
+  if (String(rawAmount).trim().startsWith("-")) return { amount, type: "debit" };
+  return { amount, type: inferFromDescription(description) };
 }
 
 export function parseCSV(csvText: string): RawTransaction[] {
+  const result = parseCSVWithResult(csvText);
+  if (result.transactions.length === 0) {
+    throw new Error("No usable transactions were found in the CSV. Please check the statement columns and try again.");
+  }
+  return result.transactions;
+}
+
+export function parseCSVWithResult(csvText: string): ParseResult {
+  if (!csvText || csvText.trim().length === 0) {
+    return {
+      transactions: [],
+      warnings: ["CSV is empty."],
+      confidence: 0,
+      totalRows: 0,
+      skippedRows: 0,
+      mappedColumns: {},
+    };
+  }
+
   const parsed = Papa.parse<Record<string, string>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: (header) => header.trim(),
   });
 
-  if (!parsed.data || parsed.data.length === 0) {
-    throw new Error("CSV is empty or malformed.");
-  }
-
-  if (parsed.errors && parsed.errors.length > 0) {
-    console.warn("CSV parsing warnings:", parsed.errors);
-  }
-
-  const headers = Object.keys(parsed.data[0]);
-  const cols = headers.map((c) => c.toLowerCase().trim().replace(/\s+/g, " "));
-
-  // Find columns with flexible matching
-  let dateCol = findColumn(headers, COLUMN_MAPPINGS.date);
-  let descCol = findColumn(headers, COLUMN_MAPPINGS.description);
-  let amtCol = findColumn(headers, COLUMN_MAPPINGS.amount);
-  const debitCol = findColumn(headers, COLUMN_MAPPINGS.debitAmount);
-  const creditCol = findColumn(headers, COLUMN_MAPPINGS.creditAmount);
-  const typeCol = findColumn(headers, COLUMN_MAPPINGS.type);
-
-  // Fallback: try to guess columns by content analysis
-  const guessed = guessColumnsByContent(headers);
-  if (!dateCol && guessed.dateCol) dateCol = guessed.dateCol;
-  if (!descCol && guessed.descCol) descCol = guessed.descCol;
-  if (!amtCol && guessed.amtCol) amtCol = guessed.amtCol;
-
-  // Last resort: position-based fallback (standard bank CSV format)
-  // Usually: [Date, Description, Amount/Debit/Credit, ...]
-  if (!dateCol && headers.length >= 1) {
-    dateCol = headers[0]; // First column is usually date
-    console.warn(`Using position-based fallback for date column: ${dateCol}`);
-  }
-  if (!descCol && headers.length >= 2) {
-    descCol = headers[1]; // Second column is usually description
-    console.warn(`Using position-based fallback for description column: ${descCol}`);
-  }
-  if (!amtCol && !debitCol && !creditCol && headers.length >= 3) {
-    amtCol = headers[2]; // Third column is usually amount
-    console.warn(`Using position-based fallback for amount column: ${amtCol}`);
-  }
-
-  // Validate required columns
-  if (!dateCol) {
-    throw new Error(`Could not find date column. Detected columns: ${cols.join(", ")}`);
-  }
+  const data = (parsed.data || []).filter(hasUsableContent);
+  const headers = Object.keys(data[0] || {});
+  let dateCol = findBestColumn(headers, DATE_ALIASES);
+  let descCol = findBestColumn(headers, DESC_ALIASES);
+  const debitCol = findBestColumn(headers, DEBIT_ALIASES);
+  const creditCol = findBestColumn(headers, CREDIT_ALIASES);
+  const typeCol = findBestColumn(headers, TYPE_ALIASES);
+  let amtCol = findBestColumn(
+    headers.filter((header) => header !== debitCol && header !== creditCol),
+    AMOUNT_ALIASES
+  );
+  if (!dateCol) dateCol = findColumnBySample(data, headers, (value) => normalizeDate(value) !== null);
+  if (!amtCol && !debitCol && !creditCol) amtCol = findColumnBySample(data, headers, (value) => parseAmount(value) !== null && (parseAmount(value) || 0) > 0);
   if (!descCol) {
-    throw new Error(`Could not find description column. Detected columns: ${cols.join(", ")}`);
-  }
-  if (!amtCol && !debitCol && !creditCol) {
-    throw new Error(`Could not find amount column. Detected columns: ${cols.join(", ")}`);
+    descCol = findColumnBySample(
+      data,
+      headers.filter((header) => header !== dateCol && header !== amtCol && header !== debitCol && header !== creditCol),
+      (value) => /[a-zA-Z]/.test(value) && value.length > 2,
+      1
+    );
   }
 
-  const rows: RawTransaction[] = [];
+  const transactions: RawTransaction[] = [];
   let skippedRows = 0;
 
-  for (const r of parsed.data) {
-    try {
-      const dateVal = r[dateCol];
-      const d = normalizeDate(dateVal);
-      
-      if (!d) {
-        console.warn(`Skipping row with invalid date: ${dateVal}`);
-        skippedRows++;
-        continue;
-      }
-
-      const { amount, type } = parseAmountFromRow(r, amtCol, debitCol, creditCol);
-      
-      if (amount === null || amount <= 0) {
-        console.warn(`Skipping row with invalid amount: ${r[amtCol || debitCol || creditCol || ""]}`);
-        skippedRows++;
-        continue;
-      }
-
-      // Allow type override from explicit type column
-      let finalType = type;
-      if (typeCol) {
-        const typeVal = r[typeCol]?.toLowerCase()?.trim() || "";
-        if (typeVal) {
-          if (/cr|credit|deposit|inflow/.test(typeVal)) {
-            finalType = "credit";
-          } else if (/dr|debit|withdrawal|outflow/.test(typeVal)) {
-            finalType = "debit";
-          }
-        }
-      }
-
-      rows.push({
-        ...r,
-        date: d.toISOString(),
-        description: sanitizeText(r[descCol] || ""),
-        amount,
-        type: finalType,
-      });
-    } catch (err) {
-      console.warn("Skipping malformed row:", err);
-      skippedRows++;
+  for (const row of data) {
+    const status = Object.entries(row).find(([key]) => normalizeHeader(key) === "status")?.[1];
+    if (status && !/\b(success|successful|completed|posted|settled)\b/i.test(status)) {
+      skippedRows += 1;
+      continue;
     }
+
+    const rawDate = dateCol ? row[dateCol] : "";
+    const date = normalizeDate(rawDate);
+    if (!date) {
+      skippedRows += 1;
+      continue;
+    }
+
+    const description = sanitizeText(descCol ? row[descCol] : "");
+    if (description.length <= 1) {
+      skippedRows += 1;
+      continue;
+    }
+    const { amount, type } = extractAmountAndType(row, description, {
+      amtCol,
+      debitCol,
+      creditCol,
+      typeCol,
+    });
+
+    if (amount === null || amount <= 0) {
+      skippedRows += 1;
+      continue;
+    }
+
+    transactions.push({
+      ...row,
+      date: date.toISOString(),
+      description,
+      amount,
+      type,
+    });
   }
 
-  if (rows.length === 0) {
-    throw new Error(`No valid transactions found in CSV. ${skippedRows > 0 ? `Skipped ${skippedRows} malformed rows.` : ""}`);
+  const totalRows = data.length;
+  const warnings = parsed.errors.map((error) => error.message);
+  if (transactions.length === 0) {
+    warnings.push("No usable transactions were extracted from the CSV.");
   }
 
-  console.log(`Parsed ${rows.length} transactions from CSV (${skippedRows} rows skipped)`);
-  return rows;
+  return {
+    transactions,
+    warnings,
+    confidence: totalRows > 0 ? transactions.length / totalRows : 0,
+    totalRows,
+    skippedRows,
+    mappedColumns: {
+      dateCol,
+      descCol,
+      amtCol,
+      debitCol,
+      creditCol,
+      typeCol,
+    },
+  };
 }

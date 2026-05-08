@@ -3,14 +3,14 @@ import Fuse from "fuse.js";
 const MERCHANT_ALIASES: Record<string, string[]> = {
   // Food delivery
   zomato: [
-    "zomato limited", "zomato pay", "zomato online", "zomato order",
-    "zomato food", "zomato*", "upi-zomato", "upi zomato", "zomato upi"
+    "zomato", "zomato limited", "zomato pay", "zomato online", "upi-zomato",
+    "zomato order", "zomato food", "upi zomato", "zomato upi"
   ],
   swiggy: [
-    "swiggy", "swiggy instamart", "swiggy delivery", "swiggy limited",
+    "swiggy", "swiggy instamart", "swiggy*", "upi-swiggy", "swiggy limited",
+    "swiggy delivery", "swiggy online",
     "swiggy*store", "swiggy*instamart", "swiggy*delivery", "swiggy*food",
-    "upi-swiggy", "upi swiggy", "swiggy upi", "swiggy*order",
-    "swiggy-dineout", "swiggy genie"
+    "upi swiggy", "swiggy upi", "swiggy*order", "swiggy-dineout", "swiggy genie"
   ],
   dominos: ["dominos pizza", "dominos online", "dominos*"],
   mcdonalds: ["mcdonalds", "mcd", "mcdonald"],
@@ -20,20 +20,20 @@ const MERCHANT_ALIASES: Record<string, string[]> = {
   
   // Transport
   uber: [
-    "uber india", "uber trip", "uber eats", "ubergo", "uber auto",
-    "uber*trip", "uber*eats", "upi-uber", "uber upi", "uber*india"
+    "uber", "uber india", "uber trip", "uber eats", "ubergo", "upi-uber",
+    "uber auto", "uber*trip", "uber*eats", "uber upi", "uber*india"
   ],
   ola: [
-    "ola cabs", "ola auto", "ola electric", "ola money", "ola*",
+    "ola", "ola cabs", "ola auto", "ola electric", "ola money", "upi-ola", "ola*",
     "ola upi", "upi-ola", "ola bike", "ola share"
   ],
   rapido: ["rapido bike", "rapido auto", "rapido*"],
   
   // Shopping
   amazon: [
-    "amazon pay", "amazon india", "amazon.in", "amzn", "amazon*",
-    "amazon prime", "amazon shopping", "upi-amazon", "amazon upi",
-    "amazon marketplace"
+    "amazon", "amazon pay", "amazon india", "amazon.in", "amzn",
+    "amazon seller", "upi-amazon", "amazon*", "amazon prime",
+    "amazon shopping", "amazon upi", "amazon marketplace"
   ],
   flipkart: [
     "flipkart internet", "flipkart.com", "fkart", "flipkart*",
@@ -51,11 +51,12 @@ const MERCHANT_ALIASES: Record<string, string[]> = {
   
   // Entertainment
   netflix: [
-    "netflix.com", "netflix subscription", "netflix*",
+    "netflix", "netflix.com", "netflix subscription", "upi-netflix", "netflix*",
     "netflix india", "netflix entertainment"
   ],
   spotify: [
-    "spotify india", "spotify.com", "spotify*", "spotify subscription"
+    "spotify", "spotify india", "spotify.com", "upi-spotify", "spotify*",
+    "spotify subscription"
   ],
   primevideo: ["prime video", "amazon prime video"],
   hotstar: ["disney hotstar", "hotstar*", "hotstar subscription"],
@@ -74,16 +75,15 @@ const MERCHANT_ALIASES: Record<string, string[]> = {
   
   // Payments
   paytm: [
-    "paytm payments", "paytm bank", "paytm upi", "paytm*",
-    "paytm money", "paytm first", "upi-paytm"
+    "paytm", "paytm payments", "paytm bank", "paytm upi", "upi-paytm",
+    "one97", "paytm*", "paytm money", "paytm first"
   ],
   googlepay: [
-    "google pay", "gpay", "tez", "google*tez", "upi-google",
-    "google*upi"
+    "google pay", "gpay", "tez", "upi-googlepay", "google payment",
+    "google*tez", "upi-google", "google*upi"
   ],
   phonepe: [
-    "phonepe", "phone pe", "phonepe*", "upi-phonepe",
-    "phonepe insurance"
+    "phonepe", "phone pe", "upi-phonepe", "phonepe*", "phonepe insurance"
   ],
   
   // BNPL
@@ -103,12 +103,12 @@ const MERCHANT_ALIASES: Record<string, string[]> = {
   
   // Telecom
   jio: [
-    "reliance jio", "jio recharge", "jio payments", "jio*",
-    "jio fiber", "jio postpaid", "jio prepaid"
+    "jio", "reliance jio", "jio recharge", "jio payments", "jio fiber",
+    "upi-jio", "jio*", "jio postpaid", "jio prepaid"
   ],
   airtel: [
-    "bharti airtel", "airtel payments", "airtel recharge", "airtel*",
-    "airtel broadband", "airtel dth", "airtel postpaid"
+    "airtel", "bharti airtel", "airtel payments", "airtel recharge",
+    "upi-airtel", "airtel*", "airtel broadband", "airtel dth", "airtel postpaid"
   ],
   vi: ["vodafone idea", "vi recharge", "vodafone", "idea cellular"],
   
@@ -151,13 +151,27 @@ for (const [canonical, aliases] of Object.entries(MERCHANT_ALIASES)) {
 
 const fuse = new Fuse(allNames, { keys: ["name"], threshold: 0.35, includeScore: true });
 
+function normalizeMerchantLookup(desc: string): string {
+  return desc
+    .toUpperCase()
+    .replace(/\b(?:UPI|IMPS)[-/]/g, " ")
+    .replace(/\b(?:UPI|IMPS)\b/g, " ")
+    .replace(/\b(?:REF|RRN|UTR|TXN|TRANSACTION|NO)\b[:\-/]?\s*[A-Z0-9]{6,}\b/g, " ")
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+/g, " ")
+    .replace(/\b[A-Z0-9]{10,}\b/g, " ")
+    .replace(/[^\w\s.*-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function cleanMerchantName(desc: string): string {
-  const cleaned = desc.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  const normalized = normalizeMerchantLookup(desc);
+  const cleaned = normalized.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
   const res = fuse.search(cleaned);
   if (res.length && (res[0].score ?? 1) < 0.35) {
     return res[0].item.canonical;
   }
-  return desc.trim();
+  return normalized || desc.trim();
 }
 
 export function enrichTransaction(t: any) {

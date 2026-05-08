@@ -1,44 +1,86 @@
 export function normalizeDate(dateStr: string): Date | null {
   if (!dateStr) return null;
   const s = dateStr.trim();
-  const formats = [
-    /^\d{1,2}-\d{1,2}-\d{4}$/,
-    /^\d{1,2}\/\d{1,2}\/\d{4}$/,
-    /^\d{4}-\d{1,2}-\d{1,2}$/,
-    /^\d{1,2}-[A-Za-z]{3}-\d{4}$/i,
-    /^\d{1,2}\s+[A-Za-z]{3}\s+\d{4}$/i,
-    /^\d{1,2}-\d{1,2}-\d{2}$/,
-    /^\d{1,2}\/[A-Za-z]{3}\/\d{2}$/i,
-    /^[A-Za-z]{3}\s+\d{1,2},\s*\d{4}$/i,
-  ];
+  const withoutTime = s.match(/^(.+?)(?:[ T]\d{1,2}:\d{2}(?::\d{2})?)$/);
+  if (withoutTime) {
+    const dateOnly = normalizeDate(withoutTime[1]);
+    if (dateOnly) {
+      const timeParts = s.match(/[ T](\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+      if (timeParts) {
+        dateOnly.setHours(Number(timeParts[1]), Number(timeParts[2]), Number(timeParts[3] || 0), 0);
+      }
+      return dateOnly;
+    }
+  }
+
+  const monthNames: Record<string, number> = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11,
+  };
+
+  const normalizeYear = (year: string) => {
+    const y = Number(year);
+    return y < 100 ? 2000 + y : y;
+  };
+
+  const validDate = (year: number, month: number, day: number) => {
+    const d = new Date(year, month, day);
+    return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day ? d : null;
+  };
+
+  const numeric = s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2}|\d{4})$/);
+  if (numeric) {
+    return validDate(normalizeYear(numeric[3]), Number(numeric[2]) - 1, Number(numeric[1]));
+  }
+
+  const isoLike = s.match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/);
+  if (isoLike) {
+    return validDate(Number(isoLike[1]), Number(isoLike[2]) - 1, Number(isoLike[3]));
+  }
+
+  const dayMonthName = s.match(/^(\d{1,2})[\s/-]([A-Za-z]{3})[\s/-](\d{2}|\d{4})$/i);
+  if (dayMonthName) {
+    const month = monthNames[dayMonthName[2].toLowerCase()];
+    if (month !== undefined) {
+      return validDate(normalizeYear(dayMonthName[3]), month, Number(dayMonthName[1]));
+    }
+  }
+
+  const monthNameDay = s.match(/^([A-Za-z]{3})\s+(\d{1,2}),?\s+(\d{2}|\d{4})$/i);
+  if (monthNameDay) {
+    const month = monthNames[monthNameDay[1].toLowerCase()];
+    if (month !== undefined) {
+      return validDate(normalizeYear(monthNameDay[3]), month, Number(monthNameDay[2]));
+    }
+  }
+
   const tryParse = (input: string) => {
     const d = new Date(input);
     return isNaN(d.getTime()) ? null : d;
   };
-  for (const fmt of formats) {
-    if (fmt.test(s)) {
-      if (s.includes("/")) {
-        const parts = s.split("/");
-        if (parts.length === 3) {
-          const p0 = parseInt(parts[0], 10);
-          const p1 = parseInt(parts[1], 10);
-          const p2 = parseInt(parts[2], 10);
-          if (p2 > 31) {
-            return new Date(p2, p1 - 1, p0);
-          }
-        }
-      }
-      const d = tryParse(s.replace(/-/g, "/"));
-      if (d) return d;
-    }
-  }
   return tryParse(s);
 }
 
 export function parseAmount(amountStr: string | number): number | null {
-  if (typeof amountStr === "number") return isNaN(amountStr) ? null : amountStr;
+  if (typeof amountStr === "number") return isNaN(amountStr) ? null : Math.abs(amountStr);
   if (!amountStr) return null;
-  let s = amountStr.toString().replace(/,/g, "").replace(/Rs/gi, "").replace(/₹/g, "");
+  let s = amountStr
+    .toString()
+    .replace(/,/g, "")
+    .replace(/Rs\.?/gi, "")
+    .replace(/INR/gi, "")
+    .replace(/\u20b9/g, "")
+    .replace(/â‚¹/g, "");
   s = s.replace(/[^\d.\-]/g, "");
   const n = parseFloat(s);
   return isNaN(n) ? null : Math.abs(n);

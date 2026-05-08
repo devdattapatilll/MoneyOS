@@ -11,7 +11,7 @@ import { computeInsights } from "@/lib/analytics/insights";
 import { computeWellnessScore } from "@/lib/analytics/scoring";
 import { detectLeaks } from "@/lib/analytics/leakDetector";
 import { generateRecommendations } from "@/lib/analytics/recommendations";
-import { processCSV, processPDF, loadSampleData } from "@/app/actions";
+import { processCSV, loadSampleData } from "@/app/actions";
 
 export default function Home() {
   const [rows, setRows] = useState<any[] | null>(null);
@@ -30,23 +30,13 @@ export default function Home() {
     
     try {
       const isCSV = file.name.toLowerCase().endsWith('.csv');
-      const isPDF = file.name.toLowerCase().endsWith('.pdf');
       
-      if (!isCSV && !isPDF) {
-        throw new Error("Only CSV and PDF files are supported");
+      if (!isCSV) {
+        throw new Error("Only CSV files are supported");
       }
       
-      let data;
-      
-      if (isCSV) {
-        const text = await file.text();
-        data = await processCSV(text);
-      } else {
-        // PDF: read as ArrayBuffer and convert to Buffer
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        data = await processPDF(buffer);
-      }
+      const text = await file.text();
+      const data = await processCSV(text);
       
       if (!data || data.length === 0) {
         throw new Error("No valid transactions found in the file");
@@ -67,11 +57,10 @@ export default function Home() {
     const file = e.dataTransfer.files[0];
     if (file) {
       const isCSV = file.name.toLowerCase().endsWith('.csv');
-      const isPDF = file.name.toLowerCase().endsWith('.pdf');
-      if (isCSV || isPDF) {
+      if (isCSV) {
         handleFileUpload(file);
       } else {
-        setError("Only CSV and PDF files are supported");
+        setError("Only CSV files are supported");
       }
     }
   }
@@ -97,49 +86,61 @@ export default function Home() {
   // Landing Page View
   if (!rows) {
     return (
-      <div className="min-h-screen bg-[#05070a] flex items-center justify-center p-6 font-sans">
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-75 transition duration-1000"></div>
-          <div className="relative flex flex-col md:flex-row items-stretch bg-[#0d1117] border border-white/10 rounded-2xl w-full max-w-5xl min-h-[400px] overflow-hidden shadow-2xl">
-            <div className="flex-1 p-12 flex flex-col justify-center space-y-4">
-              <span className="text-[10px] tracking-[0.2em] font-bold text-gray-500 uppercase">
-                Personal Finance Analyzer
+      <div
+        className="relative min-h-screen overflow-hidden bg-[#05070a] flex items-center justify-center p-6 font-sans"
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={handleDrop}
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_42%,rgba(39,196,166,0.10),transparent_30%),radial-gradient(circle_at_50%_45%,rgba(38,124,164,0.08),transparent_34%),linear-gradient(180deg,#080d15_0%,#05070a_70%)]" />
+        <div className="relative w-full max-w-7xl">
+          <div className="absolute -inset-8 rounded-[2rem] bg-[radial-gradient(circle_at_18%_50%,rgba(64,255,203,0.20),transparent_32%),linear-gradient(90deg,rgba(65,222,186,0.14),rgba(75,180,236,0.11),rgba(42,80,160,0.07))] blur-3xl opacity-70 transition duration-1000"></div>
+          <div className={`relative flex w-full min-h-[500px] flex-col items-stretch overflow-hidden rounded-[22px] border bg-[#0d121b]/92 shadow-[0_0_70px_rgba(49,173,220,0.18)] backdrop-blur md:flex-row ${isDragging ? "border-cyan-300/60" : "border-cyan-300/40"}`}>
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-[48%] bg-[radial-gradient(circle_at_8%_48%,rgba(99,255,204,0.20),rgba(45,178,172,0.11)_34%,transparent_72%)]"></div>
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(100deg,rgba(85,255,207,0.08),rgba(26,111,146,0.06)_38%,rgba(21,24,47,0.13)_72%)]"></div>
+
+            <div className="relative flex flex-1 flex-col justify-center px-8 py-12 sm:px-12 md:px-16 lg:px-20">
+              <span className="text-[13px] font-bold uppercase tracking-[0.24em] text-slate-400/80">
+                Personal Finance Tracker
               </span>
-              <h1 className="text-6xl font-bold tracking-tight text-white">
-                Money <span className="text-[#4fd1ed]">OS</span>
+              <h1 className="mt-[2mm] text-5xl font-bold tracking-normal text-white sm:text-6xl lg:text-7xl">
+                Money<span className="text-[#5fe8ee] drop-shadow-[0_0_24px_rgba(95,232,238,0.45)]">OS</span>
               </h1>
-              <p className="text-gray-400 text-lg leading-relaxed max-w-sm">
-                Your AI-Powered Financial Health Mapper for UPI Spending & Financial Wellness
+              <p className="mt-[5mm] max-w-2xl text-base italic font-semibold leading-relaxed text-white/80 sm:text-lg">
+                UPI Spend Analyser and Financial Health Tracker.
               </p>
             </div>
-            <div className="hidden md:block w-[1px] bg-gradient-to-b from-transparent via-gray-700 to-transparent my-12"></div>
-            <div className="flex-1 p-12 flex flex-col items-center justify-center text-center space-y-6">
+            <div className="relative hidden w-[1px] bg-gradient-to-b from-transparent via-slate-500/35 to-transparent my-12 md:block"></div>
+            <div className="relative flex flex-1 flex-col items-center justify-center space-y-7 px-8 py-12 text-center sm:px-12 md:px-16 lg:px-20">
               <div className="space-y-2">
-                <h2 className="text-2xl font-semibold text-white">Upload Statement</h2>
-                <p className="text-gray-500 text-sm">
-                  Drop in a CSV or PDF statement to build your dashboard.
+                <h2 className="text-3xl font-semibold text-white">Upload Statement</h2>
+                <p className="text-base text-slate-400">
+                  Drop in a CSV statement to build your dashboard.
                 </p>
               </div>
               
               {error && (
-                <div className="w-full max-w-xs flex items-center gap-2 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                <div className="w-full max-w-md flex items-center gap-2 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
               
-              <label className={`w-full max-w-xs group/btn flex items-center justify-center gap-3 px-6 py-4 bg-cyan-500/5 border border-dashed border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/10 rounded-xl transition-all duration-300 cursor-pointer ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}>
+              <label className={`w-full max-w-xl group/btn flex items-center justify-center gap-3 rounded-xl border border-dashed px-6 py-5 text-lg transition-all duration-300 cursor-pointer ${isDragging ? "border-cyan-300 bg-cyan-400/12" : "border-cyan-400/35 bg-cyan-500/5 hover:border-cyan-300 hover:bg-cyan-500/10"} ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}>
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-[#4fd1ed] border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <Upload className="w-5 h-5 text-[#4fd1ed]" />
                 )}
-                <span className="text-[#4fd1ed] font-medium">
-                  {isLoading ? 'Processing...' : 'Click to upload CSV / PDF'}
+                <span className="text-[#5fe8ee] font-semibold">
+                  {isLoading ? 'Processing...' : 'Click to upload CSV'}
                 </span>
                 <input
                   type="file"
-                  accept=".csv,.pdf"
+                  accept=".csv"
                   onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
                   disabled={isLoading}
                   className="hidden"
@@ -148,7 +149,7 @@ export default function Home() {
               <button 
                 onClick={handleLoadSample}
                 disabled={isLoading}
-                className="flex items-center gap-2 px-6 py-3 bg-[#161b22] border border-gray-700 hover:border-gray-500 text-gray-300 rounded-xl text-sm transition-all shadow-inner disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-3 rounded-xl border border-slate-500/60 bg-[#151b25]/80 px-7 py-3 text-base font-semibold text-slate-200 shadow-inner transition-all hover:border-cyan-300/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FileText className="w-4 h-4" />
                 Load Sample CSV
@@ -168,12 +169,12 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <button
               onClick={resetData}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="flex items-center gap-2 rounded-lg border border-sky-300/50 bg-sky-400/10 px-3 py-2 font-bold text-sky-200 transition hover:border-sky-200 hover:bg-sky-400/20 hover:text-white"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
             </button>
-            <h1 className="text-2xl font-bold text-white">Money <span className="text-cyan-400">OS</span> Dashboard</h1>
+            <h1 className="text-2xl font-bold text-white">Money<span className="text-cyan-400">OS</span> Dashboard</h1>
           </div>
           <div className="flex items-center gap-3">
             <a
@@ -233,26 +234,26 @@ export default function Home() {
                   <h4 className="text-sm font-semibold text-cyan-400 mb-3">Behavior</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Top:</span>
-                      <span className="text-slate-200">{insights.topCategory}</span>
-                    </div>
-                    <div className="flex justify-between">
                       <span className="text-slate-400">Daily Avg:</span>
                       <span className="text-slate-200">₹{insights.dailyAvg.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Weekend:</span>
-                      <span className="text-slate-200">₹{insights.weekendSpend.toLocaleString()}</span>
+                      <span className="text-slate-400">Weekday Avg:</span>
+                      <span className="text-slate-200">₹{insights.weekdayAvg.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Late Night:</span>
-                      <span className="text-slate-200">₹{insights.nightSpend.toLocaleString()}</span>
+                      <span className="text-slate-400">Weekend Avg:</span>
+                      <span className="text-slate-200">₹{insights.weekendAvg.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Late Night Avg:</span>
+                      <span className="text-slate-200">₹{insights.nightAvg.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="glass-card">
-                  <h4 className="text-sm font-semibold text-cyan-400 mb-3">Top Merchants</h4>
+                  <h4 className="text-sm font-semibold text-cyan-400 mb-3">Top Merchants / Services</h4>
                   <ul className="space-y-2 text-sm">
                     {insights.topMerchants.slice(0, 5).map(([name, amt]: any, i: number) => (
                       <li key={i} className="flex justify-between items-center">
@@ -273,7 +274,7 @@ export default function Home() {
 
             {/* Recommendations */}
             <div className="mt-4">
-              <h2 className="text-lg font-semibold text-slate-100 mb-4">Recommendations</h2>
+              <h2 className="text-lg font-semibold text-slate-100 mb-4">Personalized Recommendations</h2>
               <Recommendations recs={recs} />
             </div>
           </div>

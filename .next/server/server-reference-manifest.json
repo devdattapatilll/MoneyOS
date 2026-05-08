@@ -1,5 +1,38 @@
 {
-  "node": {},
+  "node": {
+    "76687b2b2a2ceb186ded4b1c36e4adb33c9f36f6": {
+      "workers": {
+        "app/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CProjects%20Uploaded%20on%20github%5C%5CMoneyOS%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22loadSampleData%22%2C%22processCSV%22%2C%22saveToSupabase%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/page": "action-browser"
+      }
+    },
+    "de9663e8cf0b8136ef3649644438b0eac92bd59f": {
+      "workers": {
+        "app/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CProjects%20Uploaded%20on%20github%5C%5CMoneyOS%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22loadSampleData%22%2C%22processCSV%22%2C%22saveToSupabase%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/page": "action-browser"
+      }
+    },
+    "ed9b9320392e0bdd772d383f12bede8ff820a0d0": {
+      "workers": {
+        "app/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CProjects%20Uploaded%20on%20github%5C%5CMoneyOS%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22loadSampleData%22%2C%22processCSV%22%2C%22saveToSupabase%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/page": "action-browser"
+      }
+    },
+    "f1155e3b83aae4bb90dc6a76025cc4b1aedd0f10": {
+      "workers": {
+        "app/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CProjects%20Uploaded%20on%20github%5C%5CMoneyOS%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22loadSampleData%22%2C%22processCSV%22%2C%22saveToSupabase%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/page": "action-browser"
+      }
+    }
+  },
   "edge": {},
-  "encryptionKey": "EX1TeG5TP95dI7LiXubYOYq+ul34609hYGtEtJa5H1k="
+  "encryptionKey": "fM0it/kj0c5QzdKbz80Ogx3hbpIzyuHkeInhx8vjrhA="
 }

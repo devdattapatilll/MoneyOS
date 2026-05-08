@@ -2,6 +2,7 @@
 // KPI Cards component for financial metrics display
 
 import { ArrowDown, ArrowUp, PiggyBank, Activity } from "lucide-react";
+import { getScoreLabel } from "@/lib/analytics/scoreLabel";
 
 interface Props {
   totalSpend: number;
@@ -18,6 +19,7 @@ function formatCurrency(value: number): string {
 }
 
 export default function KpiCards({ totalSpend, totalIncome, savings, score, grade }: Props) {
+  const scoreLabel = getScoreLabel(score);
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div className="glass-card flex items-center gap-4">
@@ -54,8 +56,10 @@ export default function KpiCards({ totalSpend, totalIncome, savings, score, grad
         <div>
           <p className="text-xs text-slate-400">Wellness Score</p>
           <p className="text-lg font-bold text-slate-100">
-            {isNaN(score) ? 0 : score}/100 
-            <span className="text-sm font-normal text-slate-400">({grade || 'N/A'})</span>
+            {isNaN(score) ? 0 : score}/100
+            <span className={`ml-2 inline-flex rounded-md border px-2 py-0.5 text-xs font-bold ${scoreLabel.pillClass}`}>
+              {scoreLabel.label || grade}
+            </span>
           </p>
         </div>
       </div>

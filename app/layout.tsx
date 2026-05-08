@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Money OS — UPI Spend Analyzer",
+  title: "MoneyOS - UPI Spend Analyzer",
   description: "AI-powered personal financial health mapper for Indian UPI transactions",
 };
 

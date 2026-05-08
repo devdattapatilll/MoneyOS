@@ -28,14 +28,24 @@ interface Props {
   rows: any[];
 }
 
+function topWithMiscellaneous(categories: [string, number][], limit: number): [string, number][] {
+  const valid = categories.filter(([, value]) => value > 0).sort((a, b) => b[1] - a[1]);
+  const miscTotal = valid
+    .filter(([name], index) => index >= limit - 1 || name === "Miscellaneous")
+    .reduce((sum, [, value]) => sum + value, 0);
+  const top = valid.filter(([name]) => name !== "Miscellaneous").slice(0, limit - 1);
+  return miscTotal > 0 ? [...top, ["Miscellaneous", miscTotal]] : top.slice(0, limit);
+}
+
+function roundedAxisMax(value: number): number {
+  if (value <= 0) return 100000;
+  if (value >= 900000) return Math.ceil(value / 100000) * 100000;
+  if (value <= 150000) return Math.ceil(value / 50000) * 50000;
+  return Math.ceil(value / 100000) * 100000;
+}
+
 export default function Charts({ categorySpend, monthlySpend, monthlyIncome, rows }: Props) {
-  // Filter out zero values and ensure data exists
-  const validCategorySpend = categorySpend.filter(([_, value]) => value > 0);
-  // Sort by value descending and take top 6 for pie chart (to avoid legend overflow)
-  const sortedCategorySpend = validCategorySpend
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 6);
-  const pieData = sortedCategorySpend.map(([name, value]) => ({ name, value }));
+  const pieData = topWithMiscellaneous(categorySpend, 15).map(([name, value]) => ({ name, value }));
   
   const months = Object.keys(monthlySpend).sort();
   const trendData = months.map((m) => ({
@@ -43,8 +53,10 @@ export default function Charts({ categorySpend, monthlySpend, monthlyIncome, row
     spend: monthlySpend[m] || 0,
     income: monthlyIncome[m] || 0,
   }));
+  const trendAxisMax = roundedAxisMax(Math.max(...trendData.flatMap((item) => [item.spend, item.income]), 0));
   
-  const topCatData = validCategorySpend.slice(0, 8).map(([name, value]) => ({ name, value }));
+  const topCatData = topWithMiscellaneous(categorySpend, 10).map(([name, value]) => ({ name, value }));
+  const topCategoryAxisMax = roundedAxisMax(Math.max(...topCatData.map((item) => item.value), 0));
 
   const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -55,6 +67,7 @@ export default function Charts({ categorySpend, monthlySpend, monthlyIncome, row
     if (short) wdSpend[short] = (wdSpend[short] || 0) + r.amount;
   }
   const wdData = weekDays.map((d) => ({ day: d, amount: wdSpend[d] || 0 }));
+  const weekdayAxisMax = roundedAxisMax(Math.max(...wdData.map((item) => item.amount), 0));
 
   // Custom tooltip for better formatting
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -141,6 +154,7 @@ export default function Charts({ categorySpend, monthlySpend, monthlyIncome, row
                 stroke="#64748b" 
                 tick={{ fontSize: 11 }} 
                 tickLine={false}
+                domain={[0, trendAxisMax]}
                 tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
               />
               <Tooltip content={<CustomTooltip />} />
@@ -189,6 +203,7 @@ export default function Charts({ categorySpend, monthlySpend, monthlyIncome, row
                   stroke="#64748b" 
                   tick={{ fontSize: 11 }} 
                   tickLine={false}
+                  domain={[0, topCategoryAxisMax]}
                   tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
                 />
                 <Tooltip content={<CustomTooltip />} />
@@ -220,6 +235,7 @@ export default function Charts({ categorySpend, monthlySpend, monthlyIncome, row
                 stroke="#64748b" 
                 tick={{ fontSize: 11 }} 
                 tickLine={false}
+                domain={[0, weekdayAxisMax]}
                 tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
               />
               <Tooltip content={<CustomTooltip />} />

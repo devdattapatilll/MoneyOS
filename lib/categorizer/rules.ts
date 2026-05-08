@@ -1,88 +1,81 @@
 export const CATEGORY_KEYWORDS: Record<string, string[]> = {
-  Food: [
-    "swiggy", "zomato", "dominos", "pizza", "mcdonalds", "kfc", "foodpanda",
-    "faasos", "box8", "eatfit", "restraunt", "restaurant", "cafe", "dining",
-    "burger king", "subway", "chaayos", "starbucks", "tea", "coffee",
-  ],
-  Shopping: [
-    "amazon", "flipkart", "myntra", "ajio", "nykaa", "meesho", "snapdeal",
-    "tatacliq", "shopify", "bigbasket", "grofers", "dmart", "reliance fresh",
-    "easyday", "more retail", "spencer", "retail", "mart", "bazaar",
-  ],
-  Transport: [
-    "uber", "ola", "rapido", "namma yatri", "auto", "cab", "taxi",
-    "metro", "bus", "train ticket", "irctc", "redbus", "abhibus",
-    "fuel", "petrol", "diesel", "hpcl", "bpcl", "iocl", "indian oil",
-  ],
-  Bills: [
-    "electricity", "water", "gas", "broadband", "wifi", "recharge",
-    "jio", "airtel", "vodafone", "bsnl", "postpaid", "prepaid",
-    "rent", "maintenance", "society", "municipal", "council",
-  ],
-  Healthcare: [
-    "apollo", "medplus", "pharmacy", "hospital", "clinic", "diagnostic",
-    "lab", "medical", "doctor", "dr ", "dental", "health", "medicine",
-    "1mg", "netmeds", "pharmeasy", "practo", "thyrocare",
-  ],
-  Entertainment: [
-    "bookmyshow", "pvr", "inox", "cinepolis", "carnival", "multiplex",
-    "gaming", "pubg", "steam", "playstation", "xbox", "netflix", "prime video",
-    "youtube", "hotstar", "sony liv", "zee5", "voot", "mx player",
-    "event", "concert", "amusement", "theme park",
-  ],
-  Subscription: [
-    "netflix", "spotify", "youtube premium", "hotstar", "sony liv",
-    "zee5", "gaana", "wynk", "jio saavn", "apple music", "amazon prime",
-    "kindle", "audible", "norton", "antivirus", "software sub",
-    "membership", "monthly sub", "annual sub",
-  ],
-  Travel: [
-    "makemytrip", "goibibo", "cleartrip", "yatra", "ixigo", "airbnb",
-    "hotel", "resort", "flight", "airline", "indigo", "air india",
-    "vistara", "spicejet", "goair", "holiday", "tour", "trip",
-  ],
-  Transfer: [
-    "paytm", "phonepe", "google pay", "gpay", "bhim", "upi transfer",
-    "imps", "neft", "rtgs", "bank transfer", "sent to", "received from",
-    "peer to peer", "friend", "family", "roommate",
-  ],
-  Salary: [
-    "salary", "payroll", "wages", "income", "remuneration", "stipend",
-    "bonus", "incentive", "commission", "reimbursement", "refund",
-  ],
-  Investment: [
-    "mutual fund", "sip", "stock", "share", "broker", "zerodha",
-    "upstox", "groww", "etf", "nps", "ppf", "fd", "rd", "gold",
-    "crypto", "bitcoin", "ethereum", "demat", "trading",
-  ],
-  EMI: [
-    "emi", "loan repayment", "home loan", "car loan", "personal loan",
-    "education loan", "two wheeler loan", "consumer durable", "hdfc loan",
-    "sbi loan", "axis loan", "icici loan", "bajaj finserv",
-  ],
-  BNPL: [
-    "simpl", "lazypay", "zestmoney", "e-paylater", "flipkart paylater",
-    "amazon paylater", "postpe", "slice", "uni", "paytm postpaid",
-    "credit line", "pay later", "postpaid",
-  ],
+  "Food Delivery": ["swiggy", "zomato", "foodpanda", "eatfit", "faasos", "box8", "freshmenu", "dominos delivery"],
+  Restaurants: ["restaurant", "restraunt", "dining", "cafe", "coffee", "tea", "starbucks", "chaayos", "barbeque", "mcdonald", "kfc", "pizza", "burger king", "subway"],
+  Groceries: ["bigbasket", "blinkit", "zepto", "grofers", "dmart", "reliance fresh", "jiomart", "more retail", "spencer", "supermarket", "grocery", "kirana"],
+  Shopping: ["amazon", "flipkart", "meesho", "snapdeal", "tatacliq", "shopify", "marketplace", "seller", "retail", "mart", "bazaar"],
+  Fashion: ["myntra", "ajio", "nykaa fashion", "zara", "h&m", "lifestyle", "max fashion", "pantaloons", "shoppers stop", "footwear", "apparel"],
+  Electronics: ["croma", "reliance digital", "vijay sales", "mobile store", "electronics", "gadget", "laptop", "computer", "appliance"],
+  Transport: ["uber", "ola", "rapido", "namma yatri", "auto", "cab", "taxi", "metro", "bus", "train ticket", "redbus", "abhibus"],
+  Fuel: ["fuel", "petrol", "diesel", "hpcl", "bpcl", "iocl", "indian oil", "shell", "bharat petroleum", "hindustan petroleum"],
+  Travel: ["makemytrip", "goibibo", "cleartrip", "yatra", "ixigo", "flight", "airline", "indigo", "air india", "vistara", "spicejet", "trip"],
+  Hotels: ["hotel", "resort", "oyo", "treebo", "fabhotel", "airbnb", "booking.com", "agoda", "stay"],
+  Bills: ["bill", "electricity", "water", "gas", "broadband", "wifi", "postpaid", "prepaid", "municipal", "council"],
+  Recharge: ["recharge", "jio", "airtel", "vodafone", "vi recharge", "bsnl", "mobile recharge", "dth", "tata play", "dish tv"],
+  Rent: ["rent", "house rent", "flat rent", "landlord", "tenant", "maintenance", "society"],
+  Education: ["school", "college", "university", "tuition", "course", "class", "byjus", "unacademy", "vedantu", "exam", "fees"],
+  Healthcare: ["apollo", "hospital", "clinic", "doctor", "dr ", "diagnostic", "lab", "medical", "health", "dental", "practo"],
+  Pharmacy: ["pharmacy", "chemist", "medicine", "medplus", "1mg", "netmeds", "pharmeasy", "apollo pharmacy"],
+  Insurance: ["insurance", "policybazaar", "lic", "hdfc life", "icici prudential", "premium", "acko", "digit insurance"],
+  EMI: ["emi", "loan repayment", "home loan", "car loan", "personal loan", "education loan", "consumer durable", "bajaj finserv", "hdfc loan", "sbi loan", "axis loan", "icici loan"],
+  BNPL: ["simpl", "lazypay", "zestmoney", "e-paylater", "flipkart paylater", "amazon paylater", "postpe", "slice", "uni", "pay later", "postpaid", "credit line"],
+  Subscription: ["netflix", "spotify", "youtube premium", "hotstar", "sony liv", "zee5", "gaana", "wynk", "jio saavn", "apple music", "amazon prime", "audible", "membership", "monthly sub", "annual sub"],
+  Entertainment: ["bookmyshow", "pvr", "inox", "cinepolis", "movie", "cinema", "event", "concert", "amusement", "theme park", "prime video", "youtube", "hotstar"],
+  Gaming: ["gaming", "pubg", "steam", "playstation", "xbox", "dream11", "my11circle", "rummy", "fantasy", "game"],
+  Investment: ["mutual fund", "sip", "nps", "ppf", "fd", "rd", "gold", "etf", "cams", "kfintech"],
+  Trading: ["stock", "share", "broker", "zerodha", "upstox", "groww", "demat", "trading", "crypto", "bitcoin", "ethereum", "coin dcx", "wazirx"],
+  "Bank Charges": ["charges", "fee", "penalty", "bounce", "mandate fail", "sms charge", "annual fee", "atm fee", "bank charge"],
+  "ATM Cash": ["atm", "cash withdrawal", "cash wdl", "withdrawal"],
+  Transfer: ["paytm", "phonepe", "google pay", "gpay", "bhim", "upi transfer", "imps", "neft", "rtgs", "bank transfer", "sent to", "received from", "p2p"],
+  "Family & Friends": ["friend", "family", "roommate", "mom", "dad", "father", "mother", "brother", "sister", "wife", "husband"],
+  Donations: ["donation", "charity", "temple", "ngo", "relief fund", "mandir", "masjid", "church", "gurudwara"],
+  Taxes: ["tax", "gst", "tds", "income tax", "challan", "itr", "property tax"],
+  Government: ["govt", "government", "passport", "aadhaar", "uidai", "rto", "traffic fine", "challan", "irctc"],
+  Beauty: ["salon", "spa", "beauty", "makeup", "nykaa", "urban company salon", "haircut", "parlour"],
+  Fitness: ["gym", "fitness", "cult fit", "healthify", "yoga", "sports club", "membership fitness"],
+  "Home Services": ["urban company", "urbanclap", "repair", "plumber", "electrician", "cleaning", "laundry", "dry clean", "pest control"],
+  "Office & Business": ["office", "coworking", "wework", "stationery", "printing", "courier", "shiprocket", "razorpay", "gst payment"],
+  "Personal Care": ["personal care", "wellness", "skincare", "cosmetics", "chemist", "lens kart", "lenskart"],
+  "Kids & Family": ["kids", "baby", "toys", "firstcry", "school fees", "daycare", "child"],
+  Pets: ["pet", "dog", "cat", "veterinary", "vet", "pet food"],
+  Salary: ["salary", "payroll", "wages", "income", "remuneration", "stipend", "bonus", "incentive", "commission", "reimbursement", "refund"],
+  Miscellaneous: [],
 };
 
-export const NON_ESSENTIAL = new Set(["Food", "Shopping", "Entertainment", "Travel", "Subscription"]);
+export const NON_ESSENTIAL = new Set([
+  "Food Delivery",
+  "Restaurants",
+  "Shopping",
+  "Fashion",
+  "Electronics",
+  "Travel",
+  "Hotels",
+  "Subscription",
+  "Entertainment",
+  "Gaming",
+  "Beauty",
+  "Personal Care",
+]);
 
-// Category weights for scoring - higher = more distinctive
 export const CATEGORY_WEIGHTS: Record<string, number> = {
-  Salary: 1.5,        // Very distinctive
-  EMI: 1.5,           // Very distinctive
-  BNPL: 1.5,          // Very distinctive
-  Investment: 1.5,    // Very distinctive
-  Subscription: 1.3,  // Fairly distinctive
-  Food: 1.2,          // Common but distinctive terms
+  Salary: 1.5,
+  EMI: 1.5,
+  BNPL: 1.5,
+  Investment: 1.5,
+  Trading: 1.4,
+  Insurance: 1.4,
+  Subscription: 1.3,
+  "Food Delivery": 1.3,
+  Pharmacy: 1.25,
+  Healthcare: 1.2,
   Shopping: 1.2,
+  Fashion: 1.2,
+  Groceries: 1.15,
   Bills: 1.1,
-  Healthcare: 1.1,
-  Transport: 1.0,     // Standard weight
-  Entertainment: 1.0,
-  Travel: 1.0,
-  Transfer: 1.0,
-  Miscellaneous: 0.8, // Less confident about this
+  Recharge: 1.1,
+  Rent: 1.1,
+  Transport: 1,
+  Fuel: 1,
+  Travel: 1,
+  Transfer: 0.9,
+  Miscellaneous: 0.8,
 };
