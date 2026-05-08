@@ -1,4 +1,5 @@
 "use client";
+// Charts component for data visualization
 
 import {
   PieChart,
