@@ -97,6 +97,39 @@ Calculates financial health based on:
 
 Includes 100+ realistic Indian UPI transactions for testing without uploading personal data.
 
+## Supabase Setup
+
+1. Create a Supabase project at https://supabase.com
+2. Copy your project URL and anon key
+3. Create a `.env.local` file (see `.env.local.example`)
+4. Run the SQL schema from `supabase/schema.sql` in the SQL Editor
+5. Create a storage bucket named "statements" (optional for file storage)
+
+## Environment Variables
+
+Create a `.env.local` file:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
+
+## Running Locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000
+
+## Building for Production
+
+```bash
+npm run build
+npm start
+```
+
 ## License
 
 MIT — Built for financial awareness and literacy.
