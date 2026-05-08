@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 5, 7, 10;
+  --background-end-rgb: 10, 15, 28;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-xl border border-slate-700/50 bg-slate-800/40 p-4 backdrop-blur-sm;
+  }
+
+  .divider {
+    @apply my-4 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent;
+  }
+}
