@@ -51,6 +51,36 @@ export function detectTransactionType(row: Record<string, string>): string {
   return "debit";
 }
 
+// More robust transaction type inference that scans all row values
+export function inferTransactionType(row: Record<string, string>): string {
+  const allText = Object.entries(row).map(([key, val]) => `${key} ${val}`).join(" ").toLowerCase();
+  
+  // Check for explicit credit indicators
+  const creditPatterns = [
+    /\bcr\b/, /\bcredit\b/, /\breceived\b/, /\bsalary\b/, 
+    /\bdeposit\b/, /\bcashback\b/, /\brefund\b/, /\binflow\b/,
+    /\bcredited\b/, /\breceived from\b/
+  ];
+  
+  for (const pattern of creditPatterns) {
+    if (pattern.test(allText)) return "credit";
+  }
+  
+  // Check for explicit debit indicators
+  const debitPatterns = [
+    /\bdr\b/, /\bdebit\b/, /\bpaid\b/, /\bsent\b/, 
+    /\bpurchase\b/, /\bwithdrawal\b/, /\boutflow\b/,
+    /\bdebited\b/, /\bpaid to\b/, /\bupi\/pay\b/
+  ];
+  
+  for (const pattern of debitPatterns) {
+    if (pattern.test(allText)) return "debit";
+  }
+  
+  // Default to debit if amount looks like an expense (common for bank statements)
+  return "debit";
+}
+
 export function sanitizeText(text: string): string {
   if (text == null) return "";
   return String(text).trim().replace(/\s+/g, " ");

@@ -68,3 +68,21 @@ export const CATEGORY_KEYWORDS: Record<string, string[]> = {
 };
 
 export const NON_ESSENTIAL = new Set(["Food", "Shopping", "Entertainment", "Travel", "Subscription"]);
+
+// Category weights for scoring - higher = more distinctive
+export const CATEGORY_WEIGHTS: Record<string, number> = {
+  Salary: 1.5,        // Very distinctive
+  EMI: 1.5,           // Very distinctive
+  BNPL: 1.5,          // Very distinctive
+  Investment: 1.5,    // Very distinctive
+  Subscription: 1.3,  // Fairly distinctive
+  Food: 1.2,          // Common but distinctive terms
+  Shopping: 1.2,
+  Bills: 1.1,
+  Healthcare: 1.1,
+  Transport: 1.0,     // Standard weight
+  Entertainment: 1.0,
+  Travel: 1.0,
+  Transfer: 1.0,
+  Miscellaneous: 0.8, // Less confident about this
+};
