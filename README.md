@@ -1,4 +1,4 @@
-# Money OS
+# Money OS 💰
 
 **UPI Spend Analyzer & Personal Financial Health Mapper**
 
