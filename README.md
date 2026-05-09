@@ -2,6 +2,8 @@
 
 UPI Spend Analyzer and Personal Financial Health Mapper
 
+![MoneyOS Dashboard](https://raw.githubusercontent.com/devdattapatilll/MoneyOS/main/screenshots/dashboard.png)
+
 ## Problem
 
 Millions of users in India transact via UPI daily, but most have no visibility into their spending patterns. Bank statements are static PDFs or CSV dumps that offer no insights. Users struggle to identify where their money is going, recurring subscriptions draining their accounts, overuse of BNPL services, food delivery expenses, and overall financial wellness.
@@ -34,6 +36,29 @@ MoneyOS/
 ├── types/                 # TypeScript definitions
 └── data/                  # Sample data for testing
 ```
+
+## Features
+
+**Smart Categorization**
+Automatically classifies transactions into 14 categories including Food, Shopping, Transport, Bills, Healthcare, Entertainment, Travel, Subscriptions, BNPL, EMI, and Investments using keyword matching and fuzzy search.
+
+**Financial Leak Detection**
+Identifies money drains through recurring subscription payments, BNPL service overuse (Simpl, Lazypay, Zestmoney), and food delivery expense tracking (Swiggy, Zomato).
+
+**Wellness Score**
+Calculates a financial health score from 0 to 100 based on savings ratio, non-essential spending percentage, monthly balance consistency, and negative month frequency.
+
+**Visual Analytics**
+Interactive charts including spend breakdown by category, monthly income versus expenses trend, top spending categories comparison, and weekday spending pattern analysis.
+
+**PDF Report Export**
+Generate and download comprehensive financial reports as PDF documents with all analytics, charts, and recommendations included.
+
+**Flexible File Parsing**
+Supports both CSV and PDF bank statements with robust parsing, confidence scoring, and graceful error handling for partial data extraction.
+
+**Personalized Recommendations**
+AI-free deterministic suggestions with estimated monthly savings based on spending patterns and leak detection results.
 
 ## Tech Stack
 
