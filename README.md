@@ -2,7 +2,9 @@
 
 UPI Spend Analyzer and Personal Financial Health Mapper
 
-![MoneyOS Dashboard](https://raw.githubusercontent.com/devdattapatilll/MoneyOS/main/screenshots/dashboard.png)
+<div align="center">
+  <img src="dashboard.png" alt="Dashboard Page" width="100%">
+</div>
 
 ## Problem
 
