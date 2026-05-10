@@ -8,11 +8,11 @@ UPI Spend Analyzer and Personal Financial Health Mapper
 
 ## Problem
 
-Millions of users in India transact via UPI daily, but most have no visibility into their spending patterns. Bank statements are static PDFs or CSV dumps that offer no insights. Users struggle to identify where their money is going, recurring subscriptions draining their accounts, overuse of BNPL services, food delivery expenses, and overall financial wellness.
+Millions of users in India transact via UPI daily, but most have no visibility into their spending patterns. Bank statements are static CSV dumps that offer no insights. Users struggle to identify where their money is going, recurring subscriptions draining their accounts, overuse of BNPL services, food delivery expenses, and overall financial wellness.
 
 ## Solution
 
-MoneyOS transforms raw UPI and bank statements into actionable financial intelligence without requiring AI or OCR. It provides automatic transaction categorization into 14 categories, financial leak detection for subscriptions and BNPL usage, a wellness score from 0-100, personalized recommendations with estimated savings, and visual analytics with interactive charts.
+MoneyOS transforms raw UPI and bank statements into actionable financial intelligence without requiring AI or OCR. It provides automatic transaction categorization into 60+ categories, financial leak detection for subscriptions and BNPL usage, a wellness score from 0-100, personalized recommendations with estimated savings, and visual analytics with interactive charts.
 
 ## Architecture
 
@@ -53,12 +53,6 @@ Calculates a financial health score from 0 to 100 based on savings ratio, non-es
 **Visual Analytics**
 Interactive charts including spend breakdown by category, monthly income versus expenses trend, top spending categories comparison, and weekday spending pattern analysis.
 
-**PDF Report Export**
-Generate and download comprehensive financial reports as PDF documents with all analytics, charts, and recommendations included.
-
-**Flexible File Parsing**
-Supports both CSV and PDF bank statements with robust parsing, confidence scoring, and graceful error handling for partial data extraction.
-
 **Personalized Recommendations**
 AI-free deterministic suggestions with estimated monthly savings based on spending patterns and leak detection results.
 
@@ -85,8 +79,4 @@ AI-free deterministic suggestions with estimated monthly savings based on spendi
 - Mobile application for on-the-go access
 - Bank API integration for automatic syncing
 
-## Owner
 
-Built by Devdatta Patil
-
-MIT License — Built for financial awareness and literacy.
