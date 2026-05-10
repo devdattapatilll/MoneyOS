@@ -1,7 +1,5 @@
 "use server";
 
-import fs from "fs";
-import path from "path";
 import { parseCSV } from "@/lib/parsers/csvParser";
 import { cleanDataframe } from "@/lib/cleaner";
 import { categorizeTransactions } from "@/lib/categorizer/engine";
@@ -42,8 +40,12 @@ export async function processCSV(csvText: string, uploadToSupabase = false, file
 }
 
 export async function loadSampleData() {
-  const filePath = path.join(process.cwd(), "data", "sample_transactions.csv");
-  const text = fs.readFileSync(filePath, "utf-8");
+  // Use fetch for serverless compatibility (Vercel)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/sample_transactions.csv`);
+  if (!response.ok) {
+    throw new Error(`Failed to load sample data: ${response.status} ${response.statusText}`);
+  }
+  const text = await response.text();
   return processCSV(text);
 }
 
